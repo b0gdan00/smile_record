@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="space-y-5">
+  <div class="flex items-end justify-between gap-3">
+    <div>
+      <p class="text-sm font-medium">База Smile</p>
+      <h1 class="mt-1 text-2xl font-semibold">Пацієнти</h1>
+    </div>
+    <button data-open-modal="patientModal" class="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-slate-50">+ Пацієнт</button>
+  </div>
+
+  <div class="overflow-x-auto rounded-lg border border-slate-200">
+    <table class="min-w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-b border-slate-200">
+          <th class="min-w-56 px-3 py-3 text-left font-semibold">Пацієнт</th>
+          <th class="min-w-40 px-3 py-3 text-left font-semibold">Телефон</th>
+          <th class="min-w-40 px-3 py-3 text-left font-semibold">Наступний запис</th>
+          <th class="min-w-40 px-3 py-3 text-left font-semibold">Останній прийом</th>
+          <th class="min-w-64 px-3 py-3 text-left font-semibold">Нотатки</th>
+        </tr>
+      </thead>
+      <tbody id="patientsTableBody" class="divide-y divide-slate-200">
+        {% for patient in patient_summaries %}
+          <tr>
+            <td class="px-3 py-3 font-medium">{{ patient.full_name }}</td>
+            <td class="px-3 py-3">{{ patient.phone or "Телефон не вказано" }}</td>
+            <td class="px-3 py-3">
+              {% if patient.next_visit %}
+                <button class="appointment-card rounded-md bg-slate-900 px-3 py-2 text-left text-xs font-medium text-slate-50" data-appointment-id="{{ patient.next_visit.id }}">
+                  {{ patient.next_visit.date }} · {{ patient.next_visit.time }}
+                </button>
+              {% else %}
+                Немає
+              {% endif %}
+            </td>
+            <td class="px-3 py-3">{{ patient.last_visit.date ~ " · " ~ patient.last_visit.time if patient.last_visit else "Немає" }}</td>
+            <td class="px-3 py-3">{{ patient.notes or "" }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td class="px-3 py-5" colspan="5">Пацієнтів ще немає.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

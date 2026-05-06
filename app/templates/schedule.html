@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="space-y-5" data-schedule-date="{{ selected_date }}" data-today="{{ today }}">
+  <div>
+    <p class="text-sm font-medium">Графік записів</p>
+    <div class="mt-1 flex flex-wrap items-center gap-3">
+      <h1 class="text-2xl font-semibold">{{ selected_date }}</h1>
+      <span id="currentTimeBadge" class="hidden rounded-md border border-slate-200 px-3 py-2 text-sm font-medium"></span>
+    </div>
+  </div>
+
+  <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+    {% for day in days %}
+      <a href="{{ url_for('main.schedule_page', date=day.date, doctor_id=selected_doctor_id) }}" class="min-w-16 rounded-lg border border-slate-200 px-3 py-2 text-center {{ 'bg-slate-900 text-slate-50' if day.is_selected else '' }}">
+        <span class="block text-xs font-medium">{{ day.label }}</span>
+        <span class="block text-xl font-semibold">{{ day.day }}</span>
+        
+      </a>
+    {% endfor %}
+  </div>
+
+  <form class="grid gap-3 md:max-w-md" method="get" action="{{ url_for('main.schedule_page') }}">
+    <input type="hidden" name="date" value="{{ selected_date }}">
+    <label class="block">
+      <span class="text-sm font-medium">Лікар</span>
+      <select name="doctor_id" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2" onchange="this.form.submit()">
+        <option value="">Усі лікарі</option>
+        {% for doctor in doctors %}
+          <option value="{{ doctor.id }}" {{ 'selected' if doctor.id == selected_doctor_id else '' }}>{{ doctor.full_name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </form>
+
+  {% if unavailable_doctors %}
+    <div class="rounded-lg border border-slate-200 p-4">
+      <h2 class="text-sm font-semibold">Не працюють у цей день</h2>
+      <div class="mt-3 flex flex-wrap gap-2">
+        {% for doctor in unavailable_doctors %}
+          <button class="doctor-work-toggle rounded-md border border-slate-200 px-3 py-2 text-sm font-medium"
+            data-doctor-id="{{ doctor.id }}"
+            data-date="{{ selected_date }}"
+            data-is-working="true"
+            data-doctor-name="{{ doctor.full_name }}">
+            Повернути: {{ doctor.full_name }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="space-y-3 md:hidden">
+    {% if not schedule_doctors %}
+      <div class="rounded-lg border border-slate-200 p-5">На цей день немає лікарів у графіку.</div>
+    {% endif %}
+    <div class="grid gap-2">
+      {% for doctor in schedule_doctors %}
+        <div class="flex items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2">
+          <span class="font-medium">{{ doctor.full_name }}</span>
+          <button class="doctor-work-toggle rounded-md border border-slate-200 px-2 py-1 text-xs font-medium"
+            data-doctor-id="{{ doctor.id }}"
+            data-date="{{ selected_date }}"
+            data-is-working="false"
+            data-doctor-name="{{ doctor.full_name }}">
+            Не працює
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+    {% for row in schedule_rows %}
+      <div class="schedule-time-row rounded-lg border border-slate-200" data-time="{{ row.time }}">
+        <div class="border-b border-slate-200 px-3 py-2 text-sm font-semibold">{{ row.time }}</div>
+        <div class="divide-y divide-slate-200">
+          {% for cell in row.cells %}
+            {% if cell.appointment %}
+              {% set muted = cell.appointment.is_past or cell.appointment.is_closed %}
+              <button class="appointment-card block w-full px-3 py-3 text-left {{ cell.appointment.status_card_class if cell.appointment.is_closed else ('border-2 border-orange-500 bg-slate-200 text-slate-900' if cell.appointment.needs_status else ('bg-slate-200 text-slate-900' if muted else 'bg-slate-900 text-slate-50')) }}" data-appointment-id="{{ cell.appointment.id }}">
+                <span class="block text-xs font-medium">{{ cell.doctor.full_name }}</span>
+                <span class="block font-semibold">{{ cell.appointment.patient_name }}</span>
+                <span class="block text-sm">{{ cell.appointment.service_name or cell.appointment.reason or cell.appointment.status_label }}</span>
+                <span class="mt-1 block text-xs">{{ cell.appointment.status_label }}</span>
+              </button>
+            {% else %}
+              <button class="schedule-empty block w-full px-3 py-3 text-left text-sm" data-date="{{ selected_date }}" data-time="{{ row.time }}" data-doctor-id="{{ cell.doctor.id }}" data-doctor-name="{{ cell.doctor.full_name }}">
+                {{ cell.doctor.full_name }} · вільно
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="hidden overflow-x-auto rounded-lg border border-slate-200 md:block">
+    <table class="min-w-full border-collapse text-sm">
+      <thead>
+        <tr class="border-b border-slate-200">
+          <th class="w-24 px-3 py-3 text-left">Час</th>
+          {% for doctor in schedule_doctors %}
+            <th class="min-w-56 border-l border-slate-200 px-3 py-3 text-left">
+              <div class="flex items-center justify-between gap-3">
+                <span>{{ doctor.full_name }}</span>
+                <button class="doctor-work-toggle rounded-md border border-slate-200 px-2 py-1 text-xs font-medium"
+                  data-doctor-id="{{ doctor.id }}"
+                  data-date="{{ selected_date }}"
+                  data-is-working="false"
+                  data-doctor-name="{{ doctor.full_name }}">
+                  Не працює
+                </button>
+              </div>
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in schedule_rows %}
+          <tr class="schedule-time-row border-b border-slate-200" data-time="{{ row.time }}">
+            <td class="px-3 py-3 font-semibold">{{ row.time }}</td>
+            {% for cell in row.cells %}
+              <td class="border-l border-slate-200 p-2">
+                {% if cell.appointment %}
+                  {% set muted = cell.appointment.is_past or cell.appointment.is_closed %}
+                  <button class="appointment-card w-full rounded-md p-3 text-left {{ cell.appointment.status_card_class if cell.appointment.is_closed else ('border-2 border-orange-500 bg-slate-200 text-slate-900' if cell.appointment.needs_status else ('bg-slate-200 text-slate-900' if muted else 'bg-slate-900 text-slate-50')) }}" data-appointment-id="{{ cell.appointment.id }}">
+                    <span class="block font-semibold">{{ cell.appointment.patient_name }}</span>
+                    <span class="block text-xs">{{ cell.appointment.service_name or cell.appointment.reason or cell.appointment.status_label }}</span>
+                    <span class="mt-1 block text-xs">{{ cell.appointment.status_label }}</span>
+                  </button>
+                {% else %}
+                  <button class="schedule-empty w-full rounded-md border border-slate-200 p-3 text-left text-sm" data-date="{{ selected_date }}" data-time="{{ row.time }}" data-doctor-id="{{ cell.doctor.id }}" data-doctor-name="{{ cell.doctor.full_name }}">Вільно</button>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

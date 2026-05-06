@@ -1,0 +1,160 @@
+{
+  "patients": {
+    "1": {
+      "id": "6836225c-b6a3-4949-aeb2-47552aa86d07",
+      "full_name": "Марія Савчук",
+      "phone": "+380671112233",
+      "birth_date": "1992-04-18",
+      "notes": "Чутливість до холодного.",
+      "created_at": "2026-05-06T11:00:52",
+      "updated_at": "2026-05-06T11:00:52"
+    },
+    "2": {
+      "id": "9cbceb2b-f9c6-4a7f-a39d-55d4902bd2d2",
+      "full_name": "Андрій Бойко",
+      "phone": "+380501234567",
+      "birth_date": "",
+      "notes": "",
+      "created_at": "2026-05-06T11:00:52",
+      "updated_at": "2026-05-06T11:00:52"
+    }
+  },
+  "appointments": {
+    "1": {
+      "id": "bc0984e6-eeee-47b1-9cf3-e398181fc06f",
+      "patient_id": "9cbceb2b-f9c6-4a7f-a39d-55d4902bd2d2",
+      "doctor_id": "797e6207-7322-4b05-a7e3-c2a121def19c",
+      "date": "2026-05-06",
+      "time": "10:30",
+      "service_name": "Огляд та консультація",
+      "reason": "",
+      "comments": "",
+      "status": "missed",
+      "visited": false,
+      "created_at": "2026-05-06T12:10:06",
+      "updated_at": "2026-05-06T12:57:29"
+    },
+    "2": {
+      "id": "8af5de11-4051-40aa-b524-d090699bd7e9",
+      "patient_id": "9cbceb2b-f9c6-4a7f-a39d-55d4902bd2d2",
+      "doctor_id": "cc07416f-4af7-41fc-afa3-8add8b076024",
+      "date": "2026-05-06",
+      "time": "11:00",
+      "service_name": "Пломбування",
+      "reason": "",
+      "comments": "",
+      "status": "attended",
+      "visited": true,
+      "created_at": "2026-05-06T12:10:34",
+      "updated_at": "2026-05-06T12:57:27"
+    },
+    "3": {
+      "id": "99380eb0-d83a-45ff-bd4d-d962c5b00b38",
+      "patient_id": "9cbceb2b-f9c6-4a7f-a39d-55d4902bd2d2",
+      "doctor_id": "797e6207-7322-4b05-a7e3-c2a121def19c",
+      "date": "2026-05-05",
+      "time": "08:00",
+      "service_name": "Видалення зуба",
+      "reason": "",
+      "comments": "",
+      "status": "planned",
+      "visited": false,
+      "created_at": "2026-05-06T12:55:47",
+      "updated_at": "2026-05-06T12:55:47"
+    },
+    "4": {
+      "id": "a698bcd1-fc74-46b4-98f2-b468a2274907",
+      "patient_id": "9cbceb2b-f9c6-4a7f-a39d-55d4902bd2d2",
+      "doctor_id": "797e6207-7322-4b05-a7e3-c2a121def19c",
+      "date": "2026-05-06",
+      "time": "13:00",
+      "service_name": "Лікування карієсу",
+      "reason": "",
+      "comments": "",
+      "status": "planned",
+      "visited": false,
+      "created_at": "2026-05-06T12:57:46",
+      "updated_at": "2026-05-06T12:57:46"
+    }
+  },
+  "doctors": {
+    "1": {
+      "id": "797e6207-7322-4b05-a7e3-c2a121def19c",
+      "full_name": "Анна Сергіївна",
+      "phone": "",
+      "notes": "Працює з Аньою",
+      "active": true,
+      "created_at": "2026-05-06T12:08:03",
+      "updated_at": "2026-05-06T12:08:03"
+    },
+    "2": {
+      "id": "cc07416f-4af7-41fc-afa3-8add8b076024",
+      "full_name": "Маргарита Сергіївна",
+      "phone": "",
+      "notes": "",
+      "active": true,
+      "created_at": "2026-05-06T12:08:16",
+      "updated_at": "2026-05-06T12:08:16"
+    },
+    "3": {
+      "id": "f17c7a28-bdbd-4631-aee4-972977f97b7f",
+      "full_name": "Тест тест",
+      "phone": "",
+      "notes": "",
+      "active": true,
+      "created_at": "2026-05-06T12:59:48",
+      "updated_at": "2026-05-06T12:59:48"
+    },
+    "4": {
+      "id": "7c67ca02-23d2-4692-bebd-eaf08414af83",
+      "full_name": "Вадім Богулов",
+      "phone": "",
+      "notes": "ахахахаххахаа",
+      "active": true,
+      "created_at": "2026-05-06T12:59:57",
+      "updated_at": "2026-05-06T12:59:57"
+    }
+  },
+  "services": {
+    "1": {
+      "id": "cbc36823-e576-4589-925f-d1bee88cf9c2",
+      "name": "Огляд та консультація",
+      "created_at": "2026-05-06T12:03:01",
+      "updated_at": "2026-05-06T12:03:01"
+    },
+    "2": {
+      "id": "f19c4333-38df-451f-8909-ef14e60275eb",
+      "name": "Пломбування",
+      "created_at": "2026-05-06T12:03:01",
+      "updated_at": "2026-05-06T12:03:01"
+    },
+    "3": {
+      "id": "7059b9e0-5668-4aff-af8e-a9c0e4cecc23",
+      "name": "Професійна чистка",
+      "created_at": "2026-05-06T12:03:01",
+      "updated_at": "2026-05-06T12:03:01"
+    },
+    "4": {
+      "id": "99621735-9419-4649-b6c6-674b5da91499",
+      "name": "Лікування карієсу",
+      "created_at": "2026-05-06T12:03:01",
+      "updated_at": "2026-05-06T12:03:01"
+    },
+    "5": {
+      "id": "d313f3a1-c180-4279-9468-f55402e9f460",
+      "name": "Видалення зуба",
+      "created_at": "2026-05-06T12:03:01",
+      "updated_at": "2026-05-06T12:03:01"
+    }
+  },
+  "doctor_days": {
+    "1": {
+      "doctor_id": "797e6207-7322-4b05-a7e3-c2a121def19c",
+      "date": "2026-05-06",
+      "is_working": true,
+      "updated_at": "2026-05-06T12:54:02",
+      "id": "10f7a7f4-6b25-4f3e-995d-489e6d5e5f00",
+      "created_at": "2026-05-06T12:53:56"
+    }
+  }
+}
