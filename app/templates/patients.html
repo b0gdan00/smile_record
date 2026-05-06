@@ -10,41 +10,65 @@
     <button data-open-modal="patientModal" class="rounded-md bg-slate-900 px-3 py-2 text-sm font-medium text-slate-50">+ Пацієнт</button>
   </div>
 
-  <div class="overflow-x-auto rounded-lg border border-slate-200">
-    <table class="min-w-full border-collapse text-sm">
-      <thead>
-        <tr class="border-b border-slate-200">
-          <th class="min-w-56 px-3 py-3 text-left font-semibold">Пацієнт</th>
-          <th class="min-w-40 px-3 py-3 text-left font-semibold">Телефон</th>
-          <th class="min-w-40 px-3 py-3 text-left font-semibold">Наступний запис</th>
-          <th class="min-w-40 px-3 py-3 text-left font-semibold">Останній прийом</th>
-          <th class="min-w-64 px-3 py-3 text-left font-semibold">Нотатки</th>
-        </tr>
-      </thead>
-      <tbody id="patientsTableBody" class="divide-y divide-slate-200">
-        {% for patient in patient_summaries %}
-          <tr>
-            <td class="px-3 py-3 font-medium">{{ patient.full_name }}</td>
-            <td class="px-3 py-3">{{ patient.phone or "Телефон не вказано" }}</td>
-            <td class="px-3 py-3">
+  <label class="block">
+    <span class="text-sm font-medium">Пошук</span>
+    <input id="patientPageSearch" autocomplete="off" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900" placeholder="ПІБ, телефон або нотатка">
+  </label>
+
+  <div id="patientsList" class="grid gap-2">
+    {% for patient in patient_summaries %}
+      <details class="patient-list-item rounded-lg border border-slate-200" data-search="{{ (patient.full_name ~ ' ' ~ patient.phone ~ ' ' ~ patient.notes)|lower }}">
+        <summary class="cursor-pointer list-none px-4 py-3">
+          <div class="flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="font-semibold">{{ patient.full_name }}</h2>
+              <p class="mt-1 text-sm text-slate-600">{{ patient.phone or "Телефон не вказано" }}</p>
+            </div>
+            <span class="shrink-0 rounded-md border border-slate-200 px-2 py-1 text-xs">{{ "Є запис" if patient.next_visit else "Без запису" }}</span>
+          </div>
+        </summary>
+        <div class="space-y-3 border-t border-slate-200 p-4 text-sm">
+          <div class="grid gap-2 sm:grid-cols-3">
+            <div class="rounded-md border border-slate-200 p-3">
+              <p class="text-xs font-medium uppercase text-slate-500">Наступний запис</p>
               {% if patient.next_visit %}
-                <button class="appointment-card rounded-md bg-slate-900 px-3 py-2 text-left text-xs font-medium text-slate-50" data-appointment-id="{{ patient.next_visit.id }}">
+                <button class="appointment-card mt-2 rounded-md bg-slate-900 px-3 py-2 text-left text-xs font-medium text-slate-50" data-appointment-id="{{ patient.next_visit.id }}">
                   {{ patient.next_visit.date }} · {{ patient.next_visit.time }}
                 </button>
+                <p class="mt-2 text-xs text-slate-500">{{ patient.next_visit.relative_label }}</p>
               {% else %}
-                Немає
+                <p class="mt-1">Немає</p>
               {% endif %}
-            </td>
-            <td class="px-3 py-3">{{ patient.last_visit.date ~ " · " ~ patient.last_visit.time if patient.last_visit else "Немає" }}</td>
-            <td class="px-3 py-3">{{ patient.notes or "" }}</td>
-          </tr>
-        {% else %}
-          <tr>
-            <td class="px-3 py-5" colspan="5">Пацієнтів ще немає.</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+            </div>
+            <div class="rounded-md border border-slate-200 p-3">
+              <p class="text-xs font-medium uppercase text-slate-500">Останній прийом</p>
+              <p class="mt-1">{{ patient.last_visit.date ~ " · " ~ patient.last_visit.time if patient.last_visit else "Немає" }}</p>
+              {% if patient.last_visit %}
+                <p class="mt-1 text-xs text-slate-500">{{ patient.last_visit.relative_label }}</p>
+              {% endif %}
+            </div>
+            <div class="rounded-md border border-slate-200 p-3">
+              <p class="text-xs font-medium uppercase text-slate-500">Дата народження</p>
+              <p class="mt-1">{{ patient.birth_date or "Не вказано" }}</p>
+            </div>
+          </div>
+          <div class="rounded-md border border-slate-200 p-3">
+            <p class="text-xs font-medium uppercase text-slate-500">Нотатки</p>
+            <p class="mt-1">{{ patient.notes or "Немає" }}</p>
+          </div>
+          <button class="edit-patient w-full rounded-md border border-slate-200 px-3 py-2 text-sm font-medium sm:w-auto"
+            data-patient-id="{{ patient.id }}"
+            data-full-name="{{ patient.full_name }}"
+            data-phone="{{ patient.phone }}"
+            data-birth-date="{{ patient.birth_date }}"
+            data-notes="{{ patient.notes }}">
+            Редагувати
+          </button>
+        </div>
+      </details>
+    {% else %}
+      <div class="rounded-lg border border-slate-200 p-5">Пацієнтів ще немає.</div>
+    {% endfor %}
   </div>
 </section>
 {% endblock %}

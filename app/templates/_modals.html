@@ -21,10 +21,11 @@
 <div id="patientModal" class="modal fixed inset-0 z-50 hidden items-end justify-center bg-slate-900/70 p-4 sm:items-center">
   <div class="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-lg bg-slate-50 p-5 shadow-xl">
     <div class="mb-5 flex items-center justify-between">
-      <h2 class="text-xl font-semibold">Новий пацієнт</h2>
+      <h2 id="patientModalTitle" class="text-xl font-semibold">Новий пацієнт</h2>
       <button data-close-modal class="rounded-md px-2 py-1" aria-label="Закрити">×</button>
     </div>
     <form id="patientForm" class="space-y-4">
+      <input type="hidden" name="patient_id">
       <label class="block">
         <span class="text-sm font-medium">ПІБ</span>
         <input name="full_name" required class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900">
@@ -88,7 +89,7 @@
       <div class="relative">
         <label class="block">
           <span class="text-sm font-medium">Пацієнт</span>
-          <input id="patientAutocomplete" autocomplete="off" required class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900" placeholder="ПІБ або телефон">
+          <input id="patientAutocomplete" name="patient_query" autocomplete="off" required class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900" placeholder="ПІБ або телефон">
         </label>
         <div id="patientSuggestions" class="absolute z-10 mt-1 hidden w-full rounded-md border border-slate-200 bg-slate-50 shadow-lg"></div>
       </div>
@@ -111,16 +112,19 @@
         </label>
       </div>
       <label class="block">
+        <span class="text-sm font-medium">Тривалість</span>
+        <select name="duration_minutes" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900">
+          <option value="30">30 хв</option>
+          <option value="15">15 хв</option>
+        </select>
+      </label>
+      <label class="block">
         <span class="text-sm font-medium">Послуга</span>
         <input name="service_name" list="servicesDatalist" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900" placeholder="Оберіть або введіть нову">
       </label>
       <label class="block">
         <span class="text-sm font-medium">Коментар до візиту</span>
         <input name="reason" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900">
-      </label>
-      <label class="block">
-        <span class="text-sm font-medium">Коментар</span>
-        <textarea name="comments" rows="3" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900"></textarea>
       </label>
       <p data-form-message class="hidden text-sm"></p>
       <button class="w-full rounded-md bg-slate-900 px-4 py-3 font-medium text-slate-50">Створити запис</button>
@@ -158,6 +162,13 @@
         </label>
       </div>
       <label class="block">
+        <span class="text-sm font-medium">Тривалість</span>
+        <select name="duration_minutes" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900">
+          <option value="30">30 хв</option>
+          <option value="15">15 хв</option>
+        </select>
+      </label>
+      <label class="block">
         <span class="text-sm font-medium">Статус</span>
         <select name="status" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900">
           {% for key, label in status_labels.items() %}
@@ -168,11 +179,21 @@
       <div class="grid gap-2 sm:grid-cols-3">
         <button type="button" class="close-status rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-slate-50" data-status="cancelled">Відмінили запис</button>
         <button type="button" class="close-status rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-slate-50" data-status="attended">Проведено</button>
-        <button type="button" class="close-status rounded-md bg-orange-500 px-3 py-2 text-sm font-medium text-slate-900" data-status="missed">Не прийшли</button>
+        <button type="button" class="close-status rounded-md bg-slate-700 px-3 py-2 text-sm font-medium text-slate-50" data-status="missed">Не прийшли</button>
       </div>
-      <div class="rounded-md border border-slate-200 p-3 text-sm">
-        <p id="detailPatientInfo"></p>
-        <p id="detailLastVisit" class="mt-1"></p>
+      <div class="grid gap-3 rounded-md border border-slate-200 p-3 text-sm sm:grid-cols-3">
+        <div>
+          <p class="text-xs font-medium uppercase text-slate-500">Телефон</p>
+          <p id="detailPatientPhone" class="mt-1 font-medium"></p>
+        </div>
+        <div>
+          <p class="text-xs font-medium uppercase text-slate-500">Нотатки</p>
+          <p id="detailPatientNotes" class="mt-1"></p>
+        </div>
+        <div>
+          <p class="text-xs font-medium uppercase text-slate-500">Попередній візит</p>
+          <p id="detailLastVisit" class="mt-1"></p>
+        </div>
       </div>
       <label class="block">
         <span class="text-sm font-medium">Послуга</span>
@@ -181,10 +202,6 @@
       <label class="block">
         <span class="text-sm font-medium">Коментар до візиту</span>
         <input name="reason" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900">
-      </label>
-      <label class="block">
-        <span class="text-sm font-medium">Коментарі реєстратури</span>
-        <textarea name="comments" rows="3" class="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-slate-900"></textarea>
       </label>
       <p data-form-message class="hidden text-sm"></p>
       <button class="w-full rounded-md bg-slate-900 px-4 py-3 font-medium text-slate-50">Зберегти деталі</button>

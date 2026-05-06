@@ -1,7 +1,7 @@
 <button class="appointment-card w-full rounded-lg border border-slate-200 p-4 text-left" data-appointment-id="{{ item.id }}">
   <div class="flex items-start justify-between gap-3">
     <div>
-      <p class="text-sm font-semibold">{{ item.date }} · {{ item.time }}</p>
+      <p class="text-sm font-semibold">{{ item.date }} · {{ item.time }} · {{ item.duration_minutes }} хв</p>
       <h2 class="mt-1 text-lg font-semibold">{{ item.patient_name }}</h2>
     </div>
     <span class="rounded-md px-2 py-1 text-xs font-medium {{ item.status_badge_class }}">{{ item.status_label }}</span>

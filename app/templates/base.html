@@ -16,11 +16,47 @@
         }
       }
     </script>
+    <style>
+      .scrollbar-none {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      .scrollbar-none::-webkit-scrollbar {
+        display: none;
+      }
+
+      .shadow-soft {
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+      }
+
+      button:not([disabled]),
+      a.rounded-md,
+      a.rounded-lg,
+      summary {
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.045);
+      }
+
+      .rounded-lg.border,
+      .rounded-md.border,
+      article.border,
+      details.border,
+      table {
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.045);
+      }
+
+      button:not([disabled]):active,
+      a.rounded-md:active,
+      a.rounded-lg:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900">
     <header class="sticky top-0 z-40 border-b border-slate-200 bg-slate-50">
       <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <a href="{{ url_for('main.schedule_page') }}" class="text-xl font-semibold">Smile</a>
+
         <nav class="flex min-w-0 flex-1 gap-2 overflow-x-auto">
           {% set items = [
             ('schedule', 'Графік', url_for('main.schedule_page')),

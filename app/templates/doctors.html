@@ -14,15 +14,16 @@
     {% for doctor in all_doctors %}
       <article class="doctor-card rounded-lg border border-slate-200 p-4" data-doctor-id="{{ doctor.id }}">
         <div class="flex items-start justify-between gap-3">
-          <div>
+          <div class="min-w-0">
             <h2 class="text-lg font-semibold">{{ doctor.full_name }}</h2>
             <p class="mt-1 text-sm">{{ doctor.phone or "Телефон не вказано" }}</p>
           </div>
-          <span class="rounded-md border border-slate-200 px-2 py-1 text-xs">{{ "Активний" if doctor.active else "Вимкнений" }}</span>
+          <span class="shrink-0 rounded-md border border-slate-200 px-2 py-1 text-xs">{{ "Активний" if doctor.active else "Вимкнений" }}</span>
         </div>
-        {% if doctor.notes %}
-          <p class="mt-2 text-sm">{{ doctor.notes }}</p>
-        {% endif %}
+        <div class="mt-3 rounded-md border border-slate-200 p-3 text-sm">
+          <p class="text-xs font-medium uppercase text-slate-500">Нотатки</p>
+          <p class="mt-1">{{ doctor.notes or "Немає" }}</p>
+        </div>
         <button class="edit-doctor mt-4 w-full rounded-md border border-slate-200 px-3 py-2 text-sm font-medium"
           data-doctor-id="{{ doctor.id }}"
           data-full-name="{{ doctor.full_name }}"

@@ -7,7 +7,7 @@
       "birth_date": "1992-04-18",
       "notes": "Чутливість до холодного.",
       "created_at": "2026-05-06T11:00:52",
-      "updated_at": "2026-05-06T11:00:52"
+      "updated_at": "2026-05-06T16:45:58"
     },
     "2": {
       "id": "9cbceb2b-f9c6-4a7f-a39d-55d4902bd2d2",
@@ -29,10 +29,11 @@
       "service_name": "Огляд та консультація",
       "reason": "",
       "comments": "",
-      "status": "missed",
+      "status": "cancelled",
       "visited": false,
       "created_at": "2026-05-06T12:10:06",
-      "updated_at": "2026-05-06T12:57:29"
+      "updated_at": "2026-05-06T16:52:12",
+      "duration_minutes": 30
     },
     "2": {
       "id": "8af5de11-4051-40aa-b524-d090699bd7e9",
@@ -71,10 +72,26 @@
       "service_name": "Лікування карієсу",
       "reason": "",
       "comments": "",
-      "status": "planned",
+      "status": "missed",
       "visited": false,
       "created_at": "2026-05-06T12:57:46",
-      "updated_at": "2026-05-06T12:57:46"
+      "updated_at": "2026-05-06T16:45:51",
+      "duration_minutes": 30
+    },
+    "5": {
+      "id": "31f49366-292a-4215-a5d5-1b084b0fa9b1",
+      "patient_id": "6836225c-b6a3-4949-aeb2-47552aa86d07",
+      "doctor_id": "797e6207-7322-4b05-a7e3-c2a121def19c",
+      "date": "2026-05-06",
+      "time": "15:45",
+      "duration_minutes": 15,
+      "service_name": "Лікування карієсу",
+      "reason": "",
+      "comments": "",
+      "status": "attended",
+      "visited": true,
+      "created_at": "2026-05-06T16:20:54",
+      "updated_at": "2026-05-06T16:52:10"
     }
   },
   "doctors": {
@@ -145,6 +162,12 @@
       "name": "Видалення зуба",
       "created_at": "2026-05-06T12:03:01",
       "updated_at": "2026-05-06T12:03:01"
+    },
+    "6": {
+      "id": "3fad8e79-a25c-4064-8f5c-8da7970ece36",
+      "name": "Короткий запис",
+      "created_at": "2026-05-06T16:23:15",
+      "updated_at": "2026-05-06T16:23:15"
     }
   },
   "doctor_days": {
@@ -155,6 +178,14 @@
       "updated_at": "2026-05-06T12:54:02",
       "id": "10f7a7f4-6b25-4f3e-995d-489e6d5e5f00",
       "created_at": "2026-05-06T12:53:56"
+    },
+    "2": {
+      "doctor_id": "7c67ca02-23d2-4692-bebd-eaf08414af83",
+      "date": "2026-05-06",
+      "is_working": true,
+      "updated_at": "2026-05-06T16:50:21",
+      "id": "38437f64-73c8-4dce-8ed3-9c35fdc0f803",
+      "created_at": "2026-05-06T16:33:41"
     }
   }
 }
